@@ -62,6 +62,7 @@ class Transportation:
         while sum(supply) > 0 and sum(demand) > 0:
             row_penalties = []
             col_penalties = []
+            # Calculate row penalties
             for i in range(self.nOfSrs):
                 if supply[i] > 0:
                     temp_arr = []
@@ -73,6 +74,7 @@ class Transportation:
                     temp_arr.clear()
                 else:
                     continue
+            # Calculate column penalties
             for j in range(self.nOfDest):
                 if demand[j] > 0:
                     temp_arr = []
@@ -86,13 +88,14 @@ class Transportation:
                     continue
             max_row_penalty = max(row_penalties, key=lambda x: x[0])
             max_col_penalty = max(col_penalties, key=lambda x: x[0])
+            # Find missing indecies by finding min in known row/column
             if max_row_penalty[0] > max_col_penalty[0]:
                 row = max_row_penalty[1]
                 col = min([(moveCosts[row][j] if demand[j] > 0 else 1e9, j) for j in range(self.nOfDest)])[1]
             else:
                 col = max_col_penalty[1]
                 row = min([(moveCosts[i][col] if supply[i] > 0 else 1e9, i) for i in range(self.nOfSrs)])[1]
-            
+            # Allocate resources
             allocation = min(supply[row], demand[col])
             result[row][col] = allocation
             supply[row] -= allocation
