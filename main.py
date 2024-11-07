@@ -195,7 +195,7 @@ class Transportation:
 
 
 if __name__ == "__main__":
-    tr = Transportation(4, 5)
+    tr = Transportation(3, 4)
     tr.inputMoveCosts()
     
     tr.printTable(NWCOR, tr.northWestCornerMethod())
