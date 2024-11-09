@@ -1,6 +1,7 @@
 NWCOR = "North-West Corner Method"
 VOGEL = "Vogel's Approximation Method"
 RUSSELL = "Russell's Approximation Method"
+INIT = "Initial Table"
 
 class Transportation:
     nOfSrs : int
@@ -174,6 +175,24 @@ class Transportation:
                 total += self.moveCosts[i][j] * allocationTable[i][j]
         return total
 
+    def printInput(self):
+        print('-' * (len(INIT) + 1))
+        print(INIT + ":")
+        print('-' * (len(INIT) + 1))
+        print('S\\D', end='\t')
+        for j in range(self.nOfDest):
+            print("D{}".format(j + 1), end='\t')
+        print('Supply')
+        for i in range(self.nOfSrs):
+            print("S{}".format(i + 1), end='\t')
+            for j in range(self.nOfDest):
+                print(self.moveCosts[i][j], end='\t')
+            print(self.supply[i])
+        print('Demand', end='\t')
+        for j in range(self.nOfDest):
+            print(self.demand[j], end='\t')
+        print(sum(self.demand))
+
     def printTable(self, methodName : str, table : list):
         print('-' * (len(methodName) + 1))
         print(methodName + ":")
@@ -191,13 +210,21 @@ class Transportation:
         print("=" * (len(total_string) + 2))
         print(total_string)
 
+    def checkBalance(self) -> bool:
+        return sum(self.supply) == sum(self.demand)
+
     
 
 
 if __name__ == "__main__":
     tr = Transportation(3, 4)
     tr.inputMoveCosts()
+
+    if not tr.checkBalance():
+        print("The problem is not balanced!")
+        exit()
     
+    tr.printInput()
     tr.printTable(NWCOR, tr.northWestCornerMethod())
     tr.printTable(VOGEL, tr.vogelApproximationMethod())
     tr.printTable(RUSSELL, tr.russellApproximationMethod())
